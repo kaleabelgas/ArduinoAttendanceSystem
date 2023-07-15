@@ -1,0 +1,11 @@
+{
+  "name": "attendancesystem",
+  "version": "0.1.0",
+  "description": "Browser interface for RFID-based arduino attendance system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

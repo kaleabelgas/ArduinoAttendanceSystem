@@ -34,6 +34,7 @@ void setup() {
 
 const byte numChars = 32;
 char receivedChars[numChars];
+char receivedChars2[numChars];
 
 boolean newData = false;
 
@@ -43,6 +44,7 @@ void loop() {
   showNewData();
 }
 
+bool isName = false;
 void recvWithStartEndMarkers() {
     static boolean recvInProgress = false;
     static byte ndx = 0;
@@ -51,12 +53,19 @@ void recvWithStartEndMarkers() {
     char rc;
  
  // if (Serial.available() > 0) {
+
     while (Serial.available() > 0 && newData == false) {
         rc = Serial.read();
 
         if (recvInProgress == true) {
             if (rc != endMarker) {
-                receivedChars[ndx] = rc;
+                if(rc == '#' && !newData){
+                  isName = true;
+                  ndx = 0;
+                  continue;
+                } 
+                if(!isName) receivedChars[ndx] = rc;
+                else receivedChars2[ndx] = rc;
                 ndx++;
                 if (ndx >= numChars) {
                     ndx = numChars - 1;
@@ -67,6 +76,7 @@ void recvWithStartEndMarkers() {
                 recvInProgress = false;
                 ndx = 0;
                 newData = true;
+                isName = false;
             }
         }
 
@@ -78,13 +88,18 @@ void recvWithStartEndMarkers() {
 
 void showNewData() {
     if (newData == true) {
-        Serial.print("This just in ... ");
         lcd.clear();
-        Serial.println(receivedChars);
+        lcd.print(receivedChars);
+        lcd.setCursor(0,1);
+        lcd.print(receivedChars2);
         newData = false;
 
-        delay(1000);
+        delay(2000);
+        memset(receivedChars, '\0', sizeof(receivedChars)); 
+        memset(receivedChars2, '\0', sizeof(receivedChars2)); 
         lcd.clear();
+        lcd.setCursor(0,0);   //Set cursor to character 2 on line 0
+        lcd.print("Tap card below...");
     }
 }
 
@@ -129,6 +144,5 @@ void printDec(byte *buffer, byte bufferSize) {
     Serial.print(buffer[i], DEC);
   }
   Serial.println();
-  cardDetected();
-  delay(2000);
+  lcd.clear();
 }

@@ -6,7 +6,8 @@ const attendanceLogSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-    }
+    },
+    logType: String
 }, { timestamps: true})
 
 module.exports = mongoose.model('AttendanceLog', attendanceLogSchema)

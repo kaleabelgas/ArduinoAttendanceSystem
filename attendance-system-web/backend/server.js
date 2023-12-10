@@ -16,11 +16,6 @@ app.use((req, res, next) => {
     next()
 })  
 
-app.use((req, res, next) => {
-    console.log(req.path, req.method)
-    next()
-})
-
 //routes
 app.use('/api/attendancelogs', attendancelogs)
 app.use('/api/users', users)

@@ -11,7 +11,7 @@ const getAllLogs = async (req, res) => {
 
 // add log
 const createLog = async (req, res) => {
-    const { cardid } = req.body
+    const { cardid, logType } = req.body
     // TODO: number validation
     try {
         const existingUser = await User.findOne({ cardid: cardid})
@@ -20,7 +20,7 @@ const createLog = async (req, res) => {
             console.log('No such user!')
         return;
         }
-        const attendanceLog = await Attendancelog.create({user: existingUser})
+        const attendanceLog = await Attendancelog.create({user: existingUser, logType: logType})
         res.status(200).json(attendanceLog)
     } catch(error){
         res.status(400).json({error: error.message})

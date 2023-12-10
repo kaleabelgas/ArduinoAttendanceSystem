@@ -48,6 +48,7 @@ bool isName = false;
 void recvWithStartEndMarkers() {
     static boolean recvInProgress = false;
     static byte ndx = 0;
+    static byte ndx2 = 0;
     char startMarker = '<';
     char endMarker = '>';
     char rc;
@@ -61,20 +62,29 @@ void recvWithStartEndMarkers() {
             if (rc != endMarker) {
                 if(rc == '#' && !newData){
                   isName = true;
-                  ndx = 0;
                   continue;
                 } 
-                if(!isName) receivedChars[ndx] = rc;
-                else receivedChars2[ndx] = rc;
-                ndx++;
-                if (ndx >= numChars) {
+                if(!isName) {
+                  receivedChars[ndx] = rc;
+                  ndx++;
+                  if (ndx >= numChars) {
                     ndx = numChars - 1;
+                  }
+                }
+                else {
+                  receivedChars2[ndx2] = rc;
+                  ndx2++;
+                  if (ndx2 >= numChars) {
+                    ndx2 = numChars - 1;
+                  }
                 }
             }
             else {
                 receivedChars[ndx] = '\0'; // terminate the string
+                receivedChars2[ndx2] = '\0'; // terminate the string
                 recvInProgress = false;
                 ndx = 0;
+                ndx2 = 0;
                 newData = true;
                 isName = false;
             }
@@ -89,10 +99,10 @@ void recvWithStartEndMarkers() {
 void showNewData() {
     if (newData == true) {
         lcd.clear();
+        lcd.setCursor(0,0);
         lcd.print(receivedChars);
         lcd.setCursor(0,1);
         lcd.print(receivedChars2);
-        newData = false;
 
         delay(2000);
         memset(receivedChars, '\0', sizeof(receivedChars)); 
@@ -100,6 +110,7 @@ void showNewData() {
         lcd.clear();
         lcd.setCursor(0,0);   //Set cursor to character 2 on line 0
         lcd.print("Tap card below...");
+        newData = false;
     }
 }
 

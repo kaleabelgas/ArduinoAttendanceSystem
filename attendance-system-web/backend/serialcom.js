@@ -11,18 +11,31 @@ const port = new SerialPort({
 
 const parser = port.pipe(new ReadlineParser({ includeDelimiter: false }))
 parser.on('data', async function(input) {
-    var isTimeIn = true;
     try {
+        console.log(input)
         const trimmedInput = input.trim()
         const existingUser = await User.findOne({ cardid: trimmedInput})
+        const existingUserLean = await User.findOne({ cardid: trimmedInput}).lean()
         if (!existingUser) {
-            console.log('No such user!')
+            port.write(`<No such user!#CID:${trimmedInput}.>`, function(err) {
+                if (err) {
+                  return console.log('Error on write: ', err.message)
+                }
+            })
             return;
         }
         const latestAttendanceLogOfUser = await Attendancelog.findOne({ user: existingUser}).sort({createdAt: -1}).lean()
-        const attendanceLog = await Attendancelog.create({user: existingUser, isTimeIn: !latestAttendanceLogOfUser.isTimeIn})
-        console.log("attendance log: ", attendanceLog)
+        var isTimeIn = latestAttendanceLogOfUser?.isTimeIn ?? false;
+        const attendanceLog = await Attendancelog.create({user: existingUser, isTimeIn: !isTimeIn})
+        var isTimeInString = latestAttendanceLogOfUser.isTimeIn ? "Time in:" : "Time out:"
+        port.write(`<${isTimeInString}#${existingUserLean.lname}>`, function(err) {
+            if (err) {
+              return console.log('Error on write: ', err.message)
+            }
+        })
 
-    } catch(error){
+    } catch(error){ 
+        console.log(error)
     }
-});
+})
+

@@ -5,8 +5,12 @@ const mongoose = require('mongoose')
 const attendancelogs = require('./routes/attendanceLogs')
 const users = require('./routes/users')
 
-const app = express()
+const serialcom = require('./serialcom')
 
+
+
+
+const app = express()
 //middleware
 
 app.use(express.json())

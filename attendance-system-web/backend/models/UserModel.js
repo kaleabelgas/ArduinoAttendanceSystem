@@ -9,7 +9,7 @@ const userSchema = new Schema({
     contact: String,
     email: String,
     isActive: Boolean,
-    cardid: Number
+    cardid: String
 }, { timestamps: true})
 
 module.exports = mongoose.model('User', userSchema)

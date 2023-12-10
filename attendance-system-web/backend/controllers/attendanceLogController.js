@@ -1,26 +1,25 @@
 const Attendancelog = require('../models/AttendanceLogModel')
-const UserModel = require('../models/UserModel')
 const User = require('../models/UserModel')
 
 // get all logs
 const getAllLogs = async (req, res) => {
-    const logs = await Attendancelog.find({}).sort({createdAt: 1})
+    const logs = await Attendancelog.find({}).sort({createdAt: -1})
 
     res.status(200).json(logs)
 }
 
 // add log
 const createLog = async (req, res) => {
-    const { cardid, logType } = req.body
+    const { cardid, isTimeIn } = req.body
     // TODO: number validation
     try {
         const existingUser = await User.findOne({ cardid: cardid})
         if (!existingUser) {
             res.status(404).json({})
             console.log('No such user!')
-        return;
+            return;
         }
-        const attendanceLog = await Attendancelog.create({user: existingUser, logType: logType})
+        const attendanceLog = await Attendancelog.create({user: existingUser, isTimeIn: isTimeIn})
         res.status(200).json(attendanceLog)
     } catch(error){
         res.status(400).json({error: error.message})

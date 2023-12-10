@@ -7,7 +7,7 @@ const attendanceLogSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    logType: String
+    isTimeIn: Boolean
 }, { timestamps: true})
 
 module.exports = mongoose.model('AttendanceLog', attendanceLogSchema)

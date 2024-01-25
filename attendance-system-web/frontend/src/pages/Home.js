@@ -69,12 +69,12 @@ const Home = () => {
             <Typography
                 variant="h3"
             >
-                Welcome!
+                Employees today:
             </Typography>
             <div className="userCards">
                 <UserCards />
             </div>
-            <Container disableGutters className="downloadrequest">
+            <Container disableGutters className="downloadrequest" style={{margin:0}} maxWidth={false}>
                 <Paper className="downloadrequestpaper">
                     <Grid container columnSpacing={2} alignItems="center" justifyContent="center" height="100%">
                         {/* <Grid item>

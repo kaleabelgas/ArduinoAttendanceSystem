@@ -9,20 +9,53 @@ import { json } from "react-router-dom";
 
 const UserCards = () => {
 
-    const [users, setUsers] = useState([]) 
+    const [logs, setLogs] = useState([])
+
+    const [users, setUsers] = useState([])
+
+    var tom = new Date()
+    var now = new Date()
+    tom.setDate(now.getDate() + 1)
+
+
     // const [jsonData, setJsonData] = useState([])
     useEffect(() => {
         const fetchUsers = async () => {
-            const response = await fetch('/api/users')
+            const response = await fetch('/api/attendancelogs/bydaterange?' + new URLSearchParams({
+                from: now.toISOString().substring(0, 10),
+                to: tom.toISOString().substring(0, 10)
+            }), {
+                method: 'GET'
+            })
             const json = await response.json()
 
-            if(response.ok){
-                setUsers(json)
+            if (!response.ok) {
+                return
             }
+            setLogs(json)
+            // console.log(json)
+            const uniqueUserIds = [...new Set(json.map(log => log.user._id))]
+            
+            const uniqueUsersList = uniqueUserIds.map(userId => {
+                const userLogs = json.filter(log => log.user._id === userId)
+                const firstLogin = userLogs.find(log => log.isTimeIn === true)
+                const lastLogout = userLogs.reverse().find(log => log.isTimeIn === false)
+                const timeIn = firstLogin.createdAt ?? null
+                const timeOut = lastLogout.createdAt ?? null
+                const fname = userLogs[0]['fname']
+                const lname = userLogs[0]['lname']
+                const cardid = userLogs[0]['cardid']
+                console.log(fname)
+                return { fname, lname, cardid, timeIn, timeOut, userId }
+                
+            })
+            console.log(uniqueUsersList)
+            setUsers(uniqueUsersList ?? [])
+
         }
         fetchUsers()
     }, [])
-    
+
     // const fetchLog = async (fname, lname) => {
     //     const response = await fetch ('/api/attendancelogs/byuser?' + new URLSearchParams({
     //         fname: fname,
@@ -43,16 +76,17 @@ const UserCards = () => {
     // }
 
     return (
-        <Container disableGutters>
-            <Grid container spacing={2}>
+        <Container disableGutters style={{margin:0}}>
+            <Grid container spacing={2} justifyContent="flex-start">
                 {users && users.map(user => (
-                    <Grid item key={user._id} >
-                        <UserCard {...user }/>
+                    <Grid item key={user.userId} >
+                        {console.log(user)}
+                        <UserCard {...user} />
                     </Grid>
                 ))}
             </Grid>
         </Container>
-     );
+    );
 }
- 
+
 export default UserCards;

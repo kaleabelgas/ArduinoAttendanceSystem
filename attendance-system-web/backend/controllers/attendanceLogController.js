@@ -26,7 +26,7 @@ const createLog = async (req, res) => {
             console.log('No such user!')
             return;
         }
-        const attendanceLog = await Attendancelog.create({user: existingUser, isTimeIn: isTimeIn})
+        const attendanceLog = await Attendancelog.create({fname: existingUser.fname, lname: existingUser.lname, cardid: existingUser.cardid, user: existingUser, isTimeIn: isTimeIn})
         res.status(200).json(attendanceLog)
     } catch(error){
         res.status(400).json({error: error.message})

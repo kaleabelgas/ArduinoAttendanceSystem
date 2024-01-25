@@ -6,9 +6,13 @@
 }
 
 .userCards {
-    margin-top: 10px;
-    /* height: 900px; */
-    flex-grow: 1;
+    padding: 10px 0px;
+    margin: 0px;
+    max-height: 750px;
+    width: 100%;
+    overflow: auto;
+    /* height: 750px; */
+    /* flex-grow: 1;  */
 }
 
 .downloadrequest {

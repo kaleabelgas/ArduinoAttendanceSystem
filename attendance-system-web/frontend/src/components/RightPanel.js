@@ -8,7 +8,7 @@ function convertDate (date){
     var mins = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes().toString()
     var hours = (date.getHours() < 10 ? '0' : '') + date.getHours().toString()
     var dateDay = date.getDate().toString()
-    var month = ((date.getHours() < 10 ? '0' : '') + 1).toString()
+    var month = ((date.getMonth() + 1 < 10 ? '0' : '')).toString() + (date.getMonth() + 1).toString()
     var dateString = date.getHours() + ":" + mins + ":" + hours + " " + month + "-" + dateDay
     return (dateString)
 }

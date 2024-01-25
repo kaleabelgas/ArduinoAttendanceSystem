@@ -1,0 +1,21 @@
+.home {
+    height: 100%;
+    padding: 20px 20px 0px 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.userCards {
+    margin-top: 10px;
+    /* height: 900px; */
+    flex-grow: 1;
+}
+
+.downloadrequest {
+    height: 100px;
+}
+
+.downloadrequestpaper {
+    height: 100%;
+    padding: 0px 20px;
+}

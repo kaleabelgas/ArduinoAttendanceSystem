@@ -3,13 +3,17 @@ const {
     createLog,
     getAllLogs,
     getByUser,
-    getByDate
+    getByDate,
+    getLimited
 } = require('../controllers/attendanceLogController')
 
 const router = express.Router()
 
 // GET ALL
 router.get('/', getAllLogs)
+
+//GET LIMITED
+router.get('/count/:count', getLimited)
 
 // ADD LOG
 router.post('/', createLog)

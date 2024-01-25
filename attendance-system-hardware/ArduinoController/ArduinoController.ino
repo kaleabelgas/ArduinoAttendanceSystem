@@ -156,4 +156,8 @@ void printDec(byte *buffer, byte bufferSize) {
   }
   Serial.println();
   lcd.clear();
+  lcd.setCursor(0,0);   //Set cursor to character 2 on line 0
+  lcd.print("Checking,");
+  lcd.setCursor(0,1);   //Set cursor to character 2 on line 0
+  lcd.print("Please wait...");
 }

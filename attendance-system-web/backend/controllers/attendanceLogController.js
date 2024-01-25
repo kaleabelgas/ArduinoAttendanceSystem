@@ -3,7 +3,14 @@ const User = require('../models/UserModel')
 
 // get all logs
 const getAllLogs = async (req, res) => {
-    const logs = await Attendancelog.find({}).sort({createdAt: -1})
+    const logs = await Attendancelog.find({}).populate('user').sort({createdAt: -1})
+
+    res.status(200).json(logs)
+}
+
+const getLimited = async (req, res) => {
+    const { count } = req.params
+    const logs = await Attendancelog.find({}).limit(count).populate('user').sort({createdAt: -1})
 
     res.status(200).json(logs)
 }
@@ -29,14 +36,15 @@ const createLog = async (req, res) => {
 // filter logs by timestamp
 const getByDate = async (req, res) => {
     const { from, to } = req.query
-    var startDate = new Date(from).toISOString()
-    var endDate = new Date(to).toISOString()
+    var startDate = new Date(from)
+    var endDate = new Date(to)
     const logs = await Attendancelog.find({
         createdAt: {
             $gte: startDate,
             $lte: endDate
         }
-    }).sort({createdAt: 1})
+    }).populate('user').sort({createdAt: 1})
+    console.log(logs)
     // TODO: frontend should check if json is empty
     res.status(200).json(logs)
 }
@@ -64,5 +72,6 @@ module.exports = {
     createLog,
     getAllLogs,
     getByUser,
-    getByDate
+    getByDate,
+    getLimited
 }

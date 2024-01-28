@@ -87,7 +87,7 @@ const User = () => {
                         clockin: item.firstLogin,
                         clockout: item.lastLogout,
                         hours: item.hours
-                    })).reverse();
+                    }));
 
                     const jsonData = [headers, ...dynamicData];
 

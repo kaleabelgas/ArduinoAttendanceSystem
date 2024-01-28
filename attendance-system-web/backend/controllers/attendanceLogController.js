@@ -44,7 +44,6 @@ const getByDate = async (req, res) => {
             $lte: endDate
         }
     }).populate('user').sort({createdAt: 1})
-    console.log(logs)
     // TODO: frontend should check if json is empty
     res.status(200).json(logs)
 }
@@ -58,14 +57,12 @@ const getByUser = async (req, res) => {
         console.log('No such user!')
         return;
     }
-    console.log(user.fname)
     const userLogs = await Attendancelog.find({user: user}).limit(10).populate({
         path: 'user',
         match: {
             _id : user._id
         }
     }).sort({createdAt: 1})
-    console.log(userLogs)
     res.status(200).json(userLogs)
 }
 

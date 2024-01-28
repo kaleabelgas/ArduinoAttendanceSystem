@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from 'react-router-dom'
 import { useParams } from "react-router-dom";
 import "./User.css"
-import { Button, Box, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, fabClasses, TextField } from "@mui/material";
+import { FormControl, InputLabel, Select, MenuItem, Grid, Button, Tooltip, Box, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, fabClasses, TextField } from "@mui/material";
 
 const User = () => {
 
@@ -23,8 +23,8 @@ const User = () => {
     const handleSubmit = async () => {
         setIsEditMode(!isEditMode)
 
-        if(!isEditMode) return
-        if(!user) return
+        if (!isEditMode) return
+        if (!user) return
         console.log(fname)
 
 
@@ -42,6 +42,81 @@ const User = () => {
             })
         })
     }
+
+    const [dateRange, setDateRange] = useState(30)
+
+    var now = new Date()
+    now.setDate(now.getDate() + 1)
+    var dateBefore = new Date()
+    dateBefore.setDate(now.getDate() - dateRange)
+
+    useEffect(() => {
+        dateBefore.setDate(now.getDate() - dateRange)
+        console.log(dateBefore)
+    }, [dateRange])
+
+    const handleChange = (e) => {
+        setDateRange(parseInt(e.target.value))
+    }
+
+    const fetchUsersLogs = async () => {
+        try {
+            if (user && user.fname && user.lname) {
+                const logsRes = await fetch('/api/attendancelogs/byuseranddate?' + new URLSearchParams({
+                    fname: user.fname,
+                    lname: user.lname,
+                    from: dateBefore.toISOString().substring(0, 10),
+                    to: now.toISOString().substring(0, 10)
+
+                }), {
+                    method: 'GET'
+                });
+
+                const logsJson = await logsRes.json();
+
+                if (logsRes.ok) {
+                    const processedLogs = getFirstLoginLastLogoutByDay(logsJson);
+
+                    const headers = ['Date', 'Card ID', 'First Name', 'Last Name', 'Clock in', 'Clock out', 'Hours'];
+
+                    const dynamicData = processedLogs.map(item => ({
+                        date: item.date,
+                        cardid: user.cardid,
+                        fname: user.fname,
+                        lname: user.lname,
+                        clockin: item.firstLogin,
+                        clockout: item.lastLogout,
+                        hours: item.hours
+                    })).reverse();
+
+                    const jsonData = [headers, ...dynamicData];
+
+
+                    const csvContent = "data:text/csv;charset=utf-8," +
+                        jsonData.map(row => Object.values(row).join(',')).join('\n');
+
+                    // Create a data URI
+                    const encodedUri = encodeURI(csvContent);
+
+                    // Create a link element and trigger a download
+                    const link = document.createElement('a');
+                    link.setAttribute('href', encodedUri);
+                    link.setAttribute('download', user.lname + "_last_" + parseInt(dateRange) + "_days.csv");
+
+                    // Append the link to the body and trigger a click event
+                    document.body.appendChild(link);
+                    link.click();
+
+                    // Remove the link from the body
+                    document.body.removeChild(link);
+                }
+            }
+        } catch (error) {
+            console.error("An error occurred:", error);
+        }
+    };
+
+
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -131,9 +206,9 @@ const User = () => {
 
                 // Add an object with formatted firstLogin, lastLogout, date, and hours to the result array
                 processedLogs.push({
+                    date: date,
                     firstLogin: firstLogin ? formatTime(firstLogin) : null,
                     lastLogout: lastLogout ? formatTime(lastLogout) : null,
-                    date: date,
                     hours: calculateHours(firstLogin, lastLogout),
                 });
                 processedLogs.reverse()
@@ -221,6 +296,41 @@ const User = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Container disableGutters className="downloadrequest" style={{ margin: 0 }} maxWidth={false}>
+                    <Paper className="downloadrequestpaper">
+                        <Grid container columnSpacing={2} alignItems="center" justifyContent="center" height="100%">
+                            {/* <Grid item>
+                            <Typography
+                                variant="h6"
+                            >
+                                Download Report:
+                            </Typography>
+                        </Grid> */}
+                            <Grid item>
+                                <FormControl>
+                                    <InputLabel>Select duration</InputLabel>
+                                    <Select
+                                        value={dateRange}
+                                        label="Age"
+                                        onChange={handleChange}
+                                        sx={{
+                                            width: 250
+                                        }}
+                                    >
+                                        <MenuItem value={30}>Last 30 days</MenuItem>
+                                        <MenuItem value={90}>Last 90 days</MenuItem>
+                                        <MenuItem value={180}>Last 180 days</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item>
+                                <Button variant="contained" onClick={() => fetchUsersLogs()}>
+                                    Download Logs
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </Paper>
+                </Container>
             </Paper>
         </Container>
     );

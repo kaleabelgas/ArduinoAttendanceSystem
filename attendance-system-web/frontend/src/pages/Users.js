@@ -1,10 +1,10 @@
-import { Typography, Box, Paper, FormControl, InputLabel, Select, MenuItem, Grid, Button, Table, TableContainer, TableRow, TableCell, TableHead, TableBody, Container } from "@mui/material"
+import { Typography, Paper,  Table, TableContainer, TableRow, TableCell, TableHead, TableBody } from "@mui/material"
 import "./Users.css"
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 const Users = () => {
-    const nav = useNavigate()
+    // const nav = useNavigate()
     const [users, setUsers] = useState([])
     // const [jsonData, setJsonData] = useState([])
     useEffect(() => {
@@ -19,9 +19,9 @@ const Users = () => {
         fetchUsers()
     }, [])
 
-    const handleSubmit = async () => {
-        nav('/register')
-    }
+    // const handleSubmit = async () => {
+    //     nav('/register')
+    // }
     return (
         <div className="users">
             <Typography

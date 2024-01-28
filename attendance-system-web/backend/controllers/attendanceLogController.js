@@ -69,10 +69,38 @@ const getByUser = async (req, res) => {
     res.status(200).json(userLogs)
 }
 
+const getByUserAndDate = async (req, res) => {
+    const { from, to } = req.query
+    const { fname, lname } = req.query
+    const user = await User.findOne({ fname: fname, lname: lname})
+    if (!user) {
+        res.status(404).json({})
+        console.log('No such user!')
+        return;
+    }
+    var startDate = new Date(from)
+    var endDate = new Date(to)
+    const logs = await Attendancelog.find({
+        createdAt: {
+            $gte: startDate,
+            $lte: endDate
+        },
+        user: user
+    }).populate('user').sort({createdAt: 1})
+    console.log(logs)
+    if (!logs) {
+        res.status(404).json({})
+        console.log('No such user!')
+        return;
+    }
+    res.status(200).json(logs)
+}
+
 module.exports = {
     createLog,
     getAllLogs,
     getByUser,
     getByDate,
-    getLimited
+    getLimited,
+    getByUserAndDate
 }

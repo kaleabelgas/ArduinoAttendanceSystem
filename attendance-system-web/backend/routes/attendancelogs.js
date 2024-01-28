@@ -4,7 +4,8 @@ const {
     getAllLogs,
     getByUser,
     getByDate,
-    getLimited
+    getLimited,
+    getByUserAndDate
 } = require('../controllers/attendanceLogController')
 
 const router = express.Router()
@@ -20,6 +21,7 @@ router.post('/', createLog)
 
 // GET BY USER
 router.get('/byuser', getByUser)
+router.get('/byuseranddate', getByUserAndDate)
 
 // GET BY TIMESTAMP
 router.get('/bydaterange', getByDate)

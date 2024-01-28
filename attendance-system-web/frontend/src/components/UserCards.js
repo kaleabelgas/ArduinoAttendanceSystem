@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import UserCard from "./UserCard";
 import { Container, Grid } from "@mui/material";
-import { json } from "react-router-dom";
 
 
 
@@ -49,7 +48,7 @@ const UserCards = () => {
                 return { fname, lname, cardid, timeIn, timeOut, userId }
                 
             })
-            console.log(uniqueUsersList)
+            // console.log(uniqueUsersList)
             setUsers(uniqueUsersList ?? [])
 
         }
@@ -80,7 +79,6 @@ const UserCards = () => {
             <Grid container spacing={2} justifyContent="flex-start">
                 {users && users.map(user => (
                     <Grid item key={user.userId} >
-                        {console.log(user)}
                         <UserCard {...user} />
                     </Grid>
                 ))}

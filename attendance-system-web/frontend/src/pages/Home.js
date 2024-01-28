@@ -29,12 +29,25 @@ const Home = () => {
             method: 'GET'
         })
         const json = await response.json()
+        
+
+        const headers = ['Date', 'Card ID', 'First Name', 'Last Name', 'Log type'];
+
+        const dynamicData = json.map(item => ({
+            date: new Date(item.createdAt).toISOString().split("T")[0],
+            id: item.cardid,
+            fname: item.fname,
+            lname: item.lname,
+            type: item.isTimeIn ? 'Clock in' : 'Clock out',
+        })).reverse();
+
+        const jsonData = [headers, ...dynamicData];
 
         const flattenedData = json.map(item => flattenObject(item));
-        // console.log(json)
+        console.log(jsonData)
 
         const csvContent = "data:text/csv;charset=utf-8," +
-            flattenedData.map(row => Object.values(row).join(',')).join('\n');
+            jsonData.map(row => Object.values(row).join(',')).join('\n');
 
         // Create a data URI
         const encodedUri = encodeURI(csvContent);
@@ -54,15 +67,15 @@ const Home = () => {
 
     function flattenObject(obj, parentKey = '') {
         return Object.keys(obj).reduce((acc, key) => {
-          const newKey = parentKey ? `${parentKey}.${key}` : key;
-          if (typeof obj[key] === 'object' && obj[key] !== null) {
-            // Recursively flatten nested objects
-            return { ...acc, ...flattenObject(obj[key], newKey) };
-          } else {
-            return { ...acc, [newKey]: obj[key] };
-          }
+            const newKey = parentKey ? `${parentKey}.${key}` : key;
+            if (typeof obj[key] === 'object' && obj[key] !== null) {
+                // Recursively flatten nested objects
+                return { ...acc, ...flattenObject(obj[key], newKey) };
+            } else {
+                return { ...acc, [newKey]: obj[key] };
+            }
         }, {});
-      }
+    }
 
     return (
         <div className="home">
@@ -74,7 +87,7 @@ const Home = () => {
             <div className="userCards">
                 <UserCards />
             </div>
-            <Container disableGutters className="downloadrequest" style={{margin:0}} maxWidth={false}>
+            <Container disableGutters className="downloadrequest" style={{ margin: 0 }} maxWidth={false}>
                 <Paper className="downloadrequestpaper">
                     <Grid container columnSpacing={2} alignItems="center" justifyContent="center" height="100%">
                         {/* <Grid item>

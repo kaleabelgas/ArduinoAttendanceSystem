@@ -30,10 +30,10 @@ const editUser = async(req, res) => {
 // get user
 const getUser = async(req, res) => {
     const { id } = req.params
-    if (!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error: 'No such user!'})
-    }
-    const user = await User.findById(id)
+    // if (!mongoose.Types.ObjectId.isValid(id)){
+    //     return res.status(404).json({error: 'No such user!'})
+    // }
+    const user = await User.findOne({cardid: id})
     
     if (!user){
         return res.status(404).json({error: 'No such user!'})

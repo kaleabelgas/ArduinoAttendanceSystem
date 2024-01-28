@@ -5,7 +5,7 @@ const Sidebar = () => {
     // const history = useHistory()
     // const [selectedIndex, setSelectedIndex] = useState(1);\
 
-    var selectedIndex
+    var selectedIndex = 0;
 
     const handleListItemClick = (event, index) => {
         // setSelectedIndex(index);

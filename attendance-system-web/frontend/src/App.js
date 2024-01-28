@@ -9,6 +9,7 @@ import Users from './pages/Users';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Register from './pages/Register';
+import User from './pages/User';
 
 const theme = createTheme({
   typography: {
@@ -17,8 +18,8 @@ const theme = createTheme({
       "fontWeight": 600,
       "fontSize": 25
     },
-    h6: {
-      // "fontWeight": 600
+    h4: {
+      "fontWeight": 600
     }
   },
   palette: {
@@ -53,6 +54,11 @@ function App() {
                   exact
                   path="/register"
                   element={<Register />}
+                />
+                <Route 
+                  exact
+                  path="/users/:id"
+                  element={<User />}
                 />
               </Routes>
             </Layout>

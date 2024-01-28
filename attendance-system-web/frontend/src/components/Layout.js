@@ -11,7 +11,7 @@ const drawerWidth = 200;
 const Layout = ({ children }) => {
 
     const navigate = useNavigate()
-    const [selectedIndex, setSelectedIndex] = useState(1);
+    const [selectedIndex, setSelectedIndex] = useState(0);
 
     const handleListItemClick = (event, index) => {
         setSelectedIndex(index);

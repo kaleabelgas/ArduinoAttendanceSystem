@@ -58,13 +58,14 @@ const getByUser = async (req, res) => {
         console.log('No such user!')
         return;
     }
-    console.log(user._id)
-    const userLogs = await Attendancelog.find().populate({
+    console.log(user.fname)
+    const userLogs = await Attendancelog.find({user: user}).populate({
         path: 'user',
         match: {
             _id : user._id
         }
     }).sort({createdAt: 1})
+    console.log(userLogs)
     res.status(200).json(userLogs)
 }
 

@@ -6,13 +6,13 @@
 }
 
 .userCards {
-    padding: 10px 0px;
+    padding: 15px 0px;
     margin: 0px;
     max-height: 750px;
     width: 100%;
     overflow: auto;
     /* height: 750px; */
-    /* flex-grow: 1;  */
+    flex-grow: 1; 
 }
 
 .downloadrequest {

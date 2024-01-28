@@ -19,7 +19,7 @@ const RightPanel = () => {
     // const [jsonData, setJsonData] = useState([])
     useEffect(() => {
         const fetchLogs = async () => {
-            const response = await fetch('/api/attendancelogs/count/8')
+            const response = await fetch('/api/attendancelogs/count/10')
             const json = await response.json()
 
             if(response.ok){
@@ -47,7 +47,7 @@ const RightPanel = () => {
 
     return ( 
         <div>
-                <Paper className="rightPanel" elevation={3}>
+                <Paper className="rightPanel" >
                     <Typography variant="h5">Latest logs:</Typography>
                     <List>
                         {logs && logs.map(log => (

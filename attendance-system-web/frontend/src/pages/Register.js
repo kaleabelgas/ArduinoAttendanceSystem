@@ -34,7 +34,7 @@ const Register = () => {
     const [contact, setContact] = useState('')
     const [email, setEmail] = useState('')
     const [cardid, setCardid] = useState('')
-    const [isValid, setIsValid] = useState(true);
+    const [isValid, setIsValid] = useState(true)
 
     const isFormValid = () => {
         return fname.trim() !== '' && lname.trim() !== '' && address.trim() !== '' && contact.trim() !== '' && email.trim() !== '' && cardid.trim() !== '' && isValid

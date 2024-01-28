@@ -1,15 +1,47 @@
 import { useEffect } from "react";
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom'
 import { useParams } from "react-router-dom";
 import "./User.css"
-import { Link, Box, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import { Button, Box, Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, fabClasses, TextField } from "@mui/material";
 
 const User = () => {
 
+    const nav = useNavigate()
     const { id } = useParams()
     const [user, setUser] = useState(null)
     const [logs, setLogs] = useState([])
+    const [isEditMode, setIsEditMode] = useState(false)
 
+    const [fname, setFname] = useState()
+    const [lname, setLname] = useState()
+    const [address, setAddress] = useState()
+    const [contact, setContact] = useState()
+    const [email, setEmail] = useState()
+    const [cardid, setCardid] = useState()
+
+    const handleSubmit = async () => {
+        setIsEditMode(!isEditMode)
+
+        if(!isEditMode) return
+        if(!user) return
+        console.log(fname)
+
+
+        const response = await fetch('/api/users/' + cardid, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                fname: fname,
+                lname: lname,
+                address: address,
+                contact: contact,
+                email: email,
+            })
+        })
+    }
     useEffect(() => {
         const fetchUsers = async () => {
             try {
@@ -18,6 +50,12 @@ const User = () => {
 
                 if (userRes.ok) {
                     setUser(userJson);
+                    setFname(userJson.fname)
+                    setLname(userJson.lname)
+                    setAddress(userJson.address)
+                    setContact(userJson.contact)
+                    setEmail(userJson.email)
+                    setCardid(id)
 
                     // Check if userJson has fname and lname properties before proceeding
                     if (userJson && userJson.fname && userJson.lname) {
@@ -58,6 +96,7 @@ const User = () => {
             logsByDate.get(logDate).push(log);
         });
 
+
         const calculateHours = (start, end) => {
             if (start && end) {
                 const diffInMilliseconds = new Date(end) - new Date(start);
@@ -97,6 +136,7 @@ const User = () => {
                     date: date,
                     hours: calculateHours(firstLogin, lastLogout),
                 });
+                processedLogs.reverse()
             }
         });
 
@@ -110,20 +150,44 @@ const User = () => {
     return (
         <Container className="user" disableGutters maxWidth={false} sx={{ alignItems: "center", display: "flex" }}>
             <Paper className="userpaper">
-                <Box mb={2}>
-                    <Typography variant="h4"> {user.fname} {user.lname} </Typography>
-                </Box>
-                <Box mb={1}>
-                    <Typography variant="body1"> Address: {user.address} </Typography>
-                </Box>
-                <Box mb={1}>
-                    <Typography variant="body1"> Contact: {user.contact} </Typography>
-                </Box>
-                <Box mb={1}>
-                    <Typography variant="body1"> Email: {user.email} </Typography>
+                <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
+                    {isEditMode ?
+                        <div>
+                            <TextField defaultValue={fname} inputProps={{ style: { padding: '10px' } }} onChange={(e) => { setFname(e.target.value) }} />
+                            <TextField defaultValue={lname} inputProps={{ style: { padding: '10px' } }} onChange={(e) => { setLname(e.target.value) }} />
+                        </div> :
+                        <Typography variant="h4"> {fname} {lname} </Typography>
+                    }
+                    <Button variant="contained" color="primary" onClick={() => handleSubmit()}>
+                        {isEditMode ? "Save" : "Edit"}
+                    </Button>
                 </Box>
                 <Box mb={1}>
                     <Typography variant="body1"> Card ID: {user.cardid} </Typography>
+                </Box>
+                <Box mb={1}>
+                    {isEditMode ?
+                        <div>
+                            <TextField defaultValue={address} inputProps={{ style: { padding: '5px' } }} onChange={(e) => { setAddress(e.target.value) }} />
+                        </div> :
+                        <Typography variant="body1"> Address: {address} </Typography>
+                    }
+                </Box>
+                <Box mb={1}>
+                    {isEditMode ?
+                        <div>
+                            <TextField defaultValue={contact} inputProps={{ style: { padding: '5px' } }} onChange={(e) => { setContact(e.target.value) }} />
+                        </div> :
+                        <Typography variant="body1"> Contact: {contact} </Typography>
+                    }
+                </Box>
+                <Box mb={1}>
+                    {isEditMode ?
+                        <div>
+                            <TextField defaultValue={email} inputProps={{ style: { padding: '5px' } }} onChange={(e) => { setEmail(e.target.value) }} />
+                        </div> :
+                        <Typography variant="body1"> Email: {email} </Typography>
+                    }
                 </Box>
                 <TableContainer className="loglist">
                     <Table>

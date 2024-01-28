@@ -30,18 +30,36 @@ SerialPort.list().then(function (ports) {
                 // TODO: check if isactive
                 const existingUser = await User.findOne({ cardid: trimmedInput })
                 const existingUserLean = await User.findOne({ cardid: trimmedInput }).lean()
+
                 if (!existingUser) {
-                    port.write(`<No such user!#CID:${trimmedInput}.>`, function (err) {
+                    port.write(`<Card not#registered!.>`, function (err) {
                         if (err) {
                             return console.log('Error on write: ', err.message)
                         }
                     })
                     return;
                 }
-                const latestAttendanceLogOfUser = await Attendancelog.findOne({ user: existingUser }).sort({ createdAt: -1 }).lean()
-                var isTimeIn = latestAttendanceLogOfUser?.isTimeIn ?? false;
-                console.log(isTimeIn)
-                const attendanceLog = await Attendancelog.create({fname: existingUser.fname, lname: existingUser.lname, cardid: existingUser.cardid, user: existingUser, isTimeIn: !isTimeIn })
+                if (!existingUser.isActive) {
+                    port.write(`<No such user!.>`, function (err) {
+                        if (err) {
+                            return console.log('Error on write: ', err.message)
+                        }
+                    })
+                    return;
+                }
+                const latestAttendanceLogOfUser = await Attendancelog.findOne({ user: existingUser }).sort({ createdAt: -1 }).lean();
+
+                // Determine if it's a new day
+                const currentDay = new Date().setHours(0, 0, 0, 0); // Get the current day at midnight
+                const isNewDay =
+                    !latestAttendanceLogOfUser ||
+                    new Date(latestAttendanceLogOfUser.createdAt).setHours(0, 0, 0, 0) !== currentDay;
+
+                // Reset isTimeIn to true if it's a new day
+                const isTimeIn = isNewDay ? true : latestAttendanceLogOfUser?.isTimeIn ?? false;
+
+                console.log(isTimeIn);
+                const attendanceLog = await Attendancelog.create({ fname: existingUser.fname, lname: existingUser.lname, cardid: existingUser.cardid, user: existingUser, isTimeIn: !isTimeIn })
                 sseEmitter.emit('serialData', attendanceLog)
                 var isTimeInString = latestAttendanceLogOfUser.isTimeIn ? "Time in:" : "Time out:"
                 port.write(`<${isTimeInString}#${existingUserLean.lname}>`, function (err) {

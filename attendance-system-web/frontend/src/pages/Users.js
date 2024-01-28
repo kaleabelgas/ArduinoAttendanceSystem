@@ -66,13 +66,13 @@ const Users = () => {
                 </Table>
             </TableContainer>
 
-            <Box className="addUser">
+            {/* <Box className="addUser">
                 <Paper className="addUserPaper" sx={{alignItems: 'center', justifyContent:'center', display:'flex'}}>
                     <Button variant="contained" onClick={() => handleSubmit()}>
                         Register new employee
                     </Button>
                 </Paper>
-            </Box>
+            </Box> */}
 
         </div>
     );

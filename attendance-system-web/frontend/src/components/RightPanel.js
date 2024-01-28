@@ -54,8 +54,8 @@ const RightPanel = () => {
                             <ListItem key={log._id}>
                                 <ListItemText>
                                     {/* {console.log(log)} */}
-                                    {log.user && log.user.fname} {log.user && log.user.lname}  <br/>
-                                    {log.isTimeIn && log.isTimeIn ? "Clocked in: " : "Clocked Out: "}
+                                    {log.user && log.fname} {log.user && log.lname}  <br/>
+                                    {log.isTimeIn && log.isTimeIn ? "Clocked Out: " : "Clocked In: "}
                                     {convertDate(log.createdAt)}
                                 </ListItemText>
                             </ListItem>

@@ -4,9 +4,14 @@ const UserCard = ({ fname,lname,cardid,timeIn,timeOut }) => {
 
     const dtin = new Date(timeIn)
     const dtout = new Date(timeOut)
-    const tin = (dtin.getHours() < 10 ? '0' : '') + dtin.getHours().toString() + ":" + (dtin.getMinutes() < 10 ? '0' : '') + dtin.getMinutes().toString()
-    const tout = (dtout.getHours() < 10 ? '0' : '') + dtout.getHours().toString() + ":" + (dtout.getMinutes() < 10 ? '0' : '') + dtout.getMinutes().toString()
-
+    let tin = (dtin.getHours() < 10 ? '0' : '') + dtin.getHours().toString() + ":" + (dtin.getMinutes() < 10 ? '0' : '') + dtin.getMinutes().toString()
+    let tout = (dtout.getHours() < 10 ? '0' : '') + dtout.getHours().toString() + ":" + (dtout.getMinutes() < 10 ? '0' : '') + dtout.getMinutes().toString()
+    if (!timeIn){
+        tin = ""
+    }
+    if (!timeOut){
+        tout = ""
+    }
     return ( 
         <Card>
             <CardHeader title={ fname +  ' ' +lname }/>

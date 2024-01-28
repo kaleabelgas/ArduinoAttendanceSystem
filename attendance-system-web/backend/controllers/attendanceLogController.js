@@ -59,7 +59,7 @@ const getByUser = async (req, res) => {
         return;
     }
     console.log(user.fname)
-    const userLogs = await Attendancelog.find({user: user}).populate({
+    const userLogs = await Attendancelog.find({user: user}).limit(10).populate({
         path: 'user',
         match: {
             _id : user._id

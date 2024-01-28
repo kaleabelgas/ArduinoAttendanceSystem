@@ -1,5 +1,5 @@
 import UserCards from "../components/UserCards"
-import { Typography, Paper, Container, FormControl, InputLabel, Select, MenuItem, Grid, Button } from "@mui/material"
+import { Typography, Paper, Container, FormControl, InputLabel, Select, MenuItem, Grid, Button, Tooltip } from "@mui/material"
 import "./Home.css"
 import { useEffect, useState } from "react";
 
@@ -102,9 +102,12 @@ const Home = () => {
                             </FormControl>
                         </Grid>
                         <Grid item>
-                            <Button variant="contained" onClick={() => handleSubmit()}>
-                                Download Report
-                            </Button>
+                            <Tooltip title="For per-user daily reports, go to Employees page." placement="top">
+
+                                <Button variant="contained" onClick={() => handleSubmit()}>
+                                    Download Logs
+                                </Button>
+                            </Tooltip>
                         </Grid>
                     </Grid>
                 </Paper>

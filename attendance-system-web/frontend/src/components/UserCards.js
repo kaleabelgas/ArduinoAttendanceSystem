@@ -40,12 +40,12 @@ const UserCards = () => {
                 const userLogs = json.filter(log => log.user._id === userId)
                 const firstLogin = userLogs.find(log => log.isTimeIn === true)
                 const lastLogout = userLogs.reverse().find(log => log.isTimeIn === false)
-                const timeIn = firstLogin.createdAt ?? null
-                const timeOut = lastLogout.createdAt ?? null
+                const timeIn = firstLogin?.createdAt ?? null
+                const timeOut = lastLogout?.createdAt ?? null
                 const fname = userLogs[0]['fname']
                 const lname = userLogs[0]['lname']
                 const cardid = userLogs[0]['cardid']
-                console.log(fname)
+                console.log(timeIn)
                 return { fname, lname, cardid, timeIn, timeOut, userId }
                 
             })

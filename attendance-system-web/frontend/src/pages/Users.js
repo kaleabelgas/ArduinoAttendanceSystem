@@ -9,7 +9,7 @@ const Users = () => {
     // const [jsonData, setJsonData] = useState([])
     useEffect(() => {
         const fetchUsers = async () => {
-            const response = await fetch('/api/users')
+            const response = await fetch('http://localhost:4000/api/users')
             const json = await response.json()
 
             if (response.ok) {

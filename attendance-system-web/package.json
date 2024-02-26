@@ -1,0 +1,20 @@
+{
+  "name": "attendance-system-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "backend/server.js",
+  "bin": "backend/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/server.js"
+  },
+  "pkg": {
+    "scripts": "start",
+    "assets": "frontend/*"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

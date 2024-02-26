@@ -22,7 +22,7 @@ const Home = () => {
     }
 
     const handleSubmit = async () => {
-        const response = await fetch('/api/attendancelogs/bydaterange?' + new URLSearchParams({
+        const response = await fetch('http://localhost:4000/api/attendancelogs/bydaterange?' + new URLSearchParams({
             from: dateBefore.toISOString().substring(0, 10),
             to: now.toISOString().substring(0, 10)
         }), {

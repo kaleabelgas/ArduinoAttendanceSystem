@@ -61,7 +61,11 @@ SerialPort.list().then(function (ports) {
                 console.log(isTimeIn);
                 const attendanceLog = await Attendancelog.create({ fname: existingUser.fname, lname: existingUser.lname, cardid: existingUser.cardid, user: existingUser, isTimeIn: !isTimeIn })
                 sseEmitter.emit('serialData', attendanceLog)
-                var isTimeInString = latestAttendanceLogOfUser.isTimeIn ? "Time in:" : "Time out:"
+                if (latestAttendanceLogOfUser.isTimeIn !== null) {
+                    var isTimeInString = latestAttendanceLogOfUser.isTimeIn ? "Time in:" : "Time out:"
+                }else{
+                    var isTimeInString = "Time in:"
+                }
                 port.write(`<${isTimeInString}#${existingUserLean.lname}>`, function (err) {
                     if (err) {
                         return console.log('Error on write: ', err.message)

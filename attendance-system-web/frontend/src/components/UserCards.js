@@ -20,7 +20,7 @@ const UserCards = () => {
     // const [jsonData, setJsonData] = useState([])
     useEffect(() => {
         const fetchUsers = async () => {
-            const response = await fetch('/api/attendancelogs/bydaterange?' + new URLSearchParams({
+            const response = await fetch('http://localhost:4000/api/attendancelogs/bydaterange?' + new URLSearchParams({
                 from: now.toISOString().substring(0, 10),
                 to: tom.toISOString().substring(0, 10)
             }), {
@@ -37,8 +37,8 @@ const UserCards = () => {
             
             const uniqueUsersList = uniqueUserIds.map(userId => {
                 const userLogs = json.filter(log => log.user._id === userId)
-                const firstLogin = userLogs.find(log => log.isTimeIn === true)
-                const lastLogout = userLogs.reverse().find(log => log.isTimeIn === false)
+                const firstLogin = userLogs.find(log => log.isTimeIn === false)
+                const lastLogout = userLogs.reverse().find(log => log.isTimeIn === true)
                 const timeIn = firstLogin?.createdAt ?? null
                 const timeOut = lastLogout?.createdAt ?? null
                 const fname = userLogs[0]['fname']

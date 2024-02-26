@@ -28,7 +28,7 @@ const User = () => {
         console.log(fname)
 
 
-        const response = await fetch('/api/users/' + cardid, {
+        const response = await fetch('http://localhost:4000/api/users/' + cardid, {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json"
@@ -62,7 +62,7 @@ const User = () => {
     const fetchUsersLogs = async () => {
         try {
             if (user && user.fname && user.lname) {
-                const logsRes = await fetch('/api/attendancelogs/byuseranddate?' + new URLSearchParams({
+                const logsRes = await fetch('http://localhost:4000/api/attendancelogs/byuseranddate?' + new URLSearchParams({
                     fname: user.fname,
                     lname: user.lname,
                     from: dateBefore.toISOString().substring(0, 10),
@@ -120,7 +120,7 @@ const User = () => {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const userRes = await fetch('/api/users/' + id);
+                const userRes = await fetch('http://localhost:4000/api/users/' + id);
                 const userJson = await userRes.json();
 
                 if (userRes.ok) {
@@ -134,7 +134,7 @@ const User = () => {
 
                     // Check if userJson has fname and lname properties before proceeding
                     if (userJson && userJson.fname && userJson.lname) {
-                        const logsRes = await fetch('/api/attendancelogs/byuser?' + new URLSearchParams({
+                        const logsRes = await fetch('http://localhost:4000/api/attendancelogs/byuser?' + new URLSearchParams({
                             fname: userJson.fname,
                             lname: userJson.lname
                         }), {
